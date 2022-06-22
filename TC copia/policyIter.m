@@ -91,6 +91,7 @@ classdef policyIter
         % Given a policy pi, find a new policy pi' s.t v_pi' >= v_pi
         function obj = policyImprov(obj)
             % Iterate on states
+            Q = zeros(99, 99);  % (stati, azioni)
             for s = 2 : obj.nStates
                 % Compute the state-action value function
                 Qpi = zeros(1, obj.nActions);
@@ -99,10 +100,23 @@ classdef policyIter
                     % Compute the estimate
                     Qpi(a) = obj.P(s, a, min(s+a, 101)) * (obj.R(s) + obj.gamma * obj.value(min(s+a, 101))) + ...
                              obj.P(s, a, max(s-a, 1)) * (obj.R(s) + obj.gamma * obj.value(max(s-a, 1)));
+                    Q(s,a) = Qpi(a);
                 end
                 % Take the best action
-                [~, obj.policy(s)] = max(Qpi);
+                obj.policy(s) = find(Qpi == max(Qpi), 1,'first');
+                disp(Qpi)
             end
+            
+            
+            figure(3)
+           
+            X = (1:99);
+            Y = (1:99);
+            Z = Q(X,Y);
+            surf(Z)
+            title("funzione stato-azione")
+            xlabel("azioni")
+            ylabel("stati")
         end
 
         % Policy Iteration
@@ -122,6 +136,8 @@ classdef policyIter
                     break;
                 end
             end
+
+            
         end
     end
 end
