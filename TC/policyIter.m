@@ -132,7 +132,7 @@ classdef policyIter
                 % Check if the new policy is equal to the previous one
                 if (vecnorm(obj.policy - oldPolicy, Inf) == 0)
                     % uso la norma infinita 
-                    % If the two policirs are equal stop!
+                    % If the two policirs are equal stop
                     break;
                 end
             end
